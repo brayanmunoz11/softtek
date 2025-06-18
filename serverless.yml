@@ -1,0 +1,40 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: bmunoz
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: API
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:Scan
+        - dynamodb:DeleteItem
+        - dynamodb:UpdateItem
+      Resource:
+        - arn:aws:dynamodb:us-east-1:*:table/FusionHistorial
+
+plugins:
+  - serverless-offline
+
+functions:
+  fn_manager_api:  ${file(./services/lambdas/fn_manager_api/serverless.yml)}
+  fn_validate_access:  ${file(./services/lambdas/fn_validate_access/serverless.yml)}
+
+
+resources:
+  Resources:
+    FusionHistorial:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FusionHistorial
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

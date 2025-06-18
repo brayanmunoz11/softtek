@@ -1,0 +1,28 @@
+timeout: 10
+memorySize: 512
+handler: services/lambdas/fn_manager_api/handler.handler
+events:
+  - http:
+      path: /session/{path}
+      method: any
+  - http:
+      path: /fusion/{path}
+      method: any
+      authorizer:
+        name: fn_validate_access
+        type: request
+      cors: true
+  - http:
+      path: /fusion/{path}/{param}
+      method: any
+      authorizer:
+        name: fn_validate_access
+        type: request
+      cors: true
+
+
+package:
+  patterns:
+    - "!**"
+    - "services/lambdas/fn_manager_api/handler.ts"
+    - "services/lambdas/fn_manager_api/src/**"

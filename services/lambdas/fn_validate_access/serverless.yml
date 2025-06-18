@@ -1,0 +1,8 @@
+timeout: 10
+memorySize: 512
+handler: services/lambdas/fn_validate_access/handler.handler
+package:
+  patterns:
+    - "!**"
+    - "services/lambdas/fn_validate_access/handler.ts"
+    - "services/lambdas/fn_validate_access/src/**"
